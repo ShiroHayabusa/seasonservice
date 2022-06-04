@@ -1,15 +1,33 @@
 package com.bato.seasonservice.service;
 
 import com.bato.seasonservice.model.Serv;
+import com.bato.seasonservice.repo.ServRepo;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface ServService {
-    Serv getById(Long id);
+@Service
+public class ServService {
+    private final
+    ServRepo servRepo;
 
-    void save(Serv serv);
+    public ServService(ServRepo servRepo) {
+        this.servRepo = servRepo;
+    }
 
-    void delete(Long id);
+    public Serv getById(Long id) {
+        return servRepo.findById(id).get();
+    }
 
-    List<Serv> getAll();
+    public void save(Serv serv) {
+        servRepo.save(serv);
+    }
+
+    public void delete(Long id) {
+        servRepo.deleteById(id);
+    }
+
+    public List<Serv> getAll() {
+        return servRepo.findAll();
+    }
 }

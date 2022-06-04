@@ -1,6 +1,9 @@
 package com.bato.seasonservice.controller;
 
 import com.bato.seasonservice.config.Jwt.JwtProvider;
+import com.bato.seasonservice.model.AuthRequest;
+import com.bato.seasonservice.model.AuthResponse;
+import com.bato.seasonservice.model.RegistrationRequest;
 import com.bato.seasonservice.model.User;
 import com.bato.seasonservice.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +27,10 @@ public class AuthController {
         User user = new User();
         user.setLogin(registrationRequest.getLogin());
         user.setPassword(registrationRequest.getPassword());
+        user.setFirstName(registrationRequest.getFirstName());
+        user.setLastName(registrationRequest.getLastName());
+        user.setPatronymic(registrationRequest.getPatronymic());
+        user.setEmail(registrationRequest.getEmail());
         userService.saveUser(user);
         return "OK";
     }

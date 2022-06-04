@@ -1,4 +1,4 @@
-package com.bato.seasonservice.controller;
+package com.bato.seasonservice.model;
 
 import lombok.Data;
 

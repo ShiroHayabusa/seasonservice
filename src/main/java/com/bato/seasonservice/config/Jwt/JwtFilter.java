@@ -1,12 +1,10 @@
 package com.bato.seasonservice.config.Jwt;
 
-import com.bato.seasonservice.CustomUserDetailsService;
+import com.bato.seasonservice.service.CustomUserDetailsService;
 import com.bato.seasonservice.config.CustomUserDetails;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -25,20 +23,14 @@ public class JwtFilter extends GenericFilterBean {
 
     public static final String AUTHORIZATION = "Authorization";
 
-    @Autowired
-    CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    @Autowired
-    JwtProvider jwtProvider;
+    private final JwtProvider jwtProvider;
 
-//    private final CustomUserDetailsService customUserDetailsService;
-
-//    private final JwtProvider jwtProvider;
-
-//    public JwtFilter(CustomUserDetailsService customUserDetailsService, JwtProvider jwtProvider) {
-//        this.customUserDetailsService = customUserDetailsService;
-//        this.jwtProvider = jwtProvider;
-//    }
+    public JwtFilter(CustomUserDetailsService customUserDetailsService, JwtProvider jwtProvider) {
+        this.customUserDetailsService = customUserDetailsService;
+        this.jwtProvider = jwtProvider;
+    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
