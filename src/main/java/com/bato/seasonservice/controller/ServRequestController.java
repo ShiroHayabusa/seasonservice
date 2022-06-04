@@ -83,9 +83,18 @@ public class ServRequestController {
     }
 
     @GetMapping("/users/{userId}/servs/{servId}/requests")
-    public ResponseEntity<List<ServRequest>> getAllServRequests(@PathVariable Long userId,
+    public ResponseEntity<List<ServRequest>> getServRequests(@PathVariable Long userId,
                                                                 @PathVariable Long servId){
         List<ServRequest> servRequests = servRequestService.findByUserIdAndServId(userId, servId);
+        if (servRequests.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(servRequests, HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{userId}/requests")
+    public ResponseEntity<List<ServRequest>> getAllServRequests(@PathVariable Long userId){
+        List<ServRequest> servRequests = servRequestService.findByUserId(userId);
         if (servRequests.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
