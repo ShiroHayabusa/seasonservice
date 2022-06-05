@@ -6,6 +6,8 @@ import com.bato.seasonservice.model.AuthResponse;
 import com.bato.seasonservice.model.RegistrationRequest;
 import com.bato.seasonservice.model.User;
 import com.bato.seasonservice.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +25,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody @Valid RegistrationRequest registrationRequest) {
+    public ResponseEntity<User> registerUser(@RequestBody @Valid RegistrationRequest registrationRequest) {
         User user = new User();
         user.setLogin(registrationRequest.getLogin());
         user.setPassword(registrationRequest.getPassword());
@@ -32,7 +34,7 @@ public class AuthController {
         user.setPatronymic(registrationRequest.getPatronymic());
         user.setEmail(registrationRequest.getEmail());
         userService.saveUser(user);
-        return "OK";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/auth")

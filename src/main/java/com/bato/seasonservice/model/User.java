@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name = "usr")
+@Table(name = "users")
 @Data
 
 public class User {

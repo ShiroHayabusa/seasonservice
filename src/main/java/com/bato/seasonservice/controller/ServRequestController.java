@@ -68,6 +68,7 @@ public class ServRequestController {
 
         Serv serv = servService.getById(servId);
         servRequest.setServ(serv);
+        serv.setServLimit(serv.getServLimit() - 1);
 
         servRequest.setDate(now());
 
