@@ -71,7 +71,7 @@ public class ServRequestController {
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
     @GetMapping(value = "/requests/{requestId}")
-    public ResponseEntity<ServRequest> getServ(@PathVariable("requestId") Long requestId) {
+    public ResponseEntity<ServRequest> addServ(@PathVariable("requestId") Long requestId) {
         if (requestId == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

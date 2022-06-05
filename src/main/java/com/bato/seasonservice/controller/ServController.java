@@ -79,7 +79,7 @@ public class ServController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error (Внутренняя ошибка сервера)")
     })
     @PostMapping("/servs")
-    public ResponseEntity<Serv> saveServ(@RequestBody @Valid Serv serv) {
+    public ResponseEntity<Serv> addServ(@RequestBody @Valid Serv serv) {
         HttpHeaders httpHeaders = new HttpHeaders();
 
         if (serv == null) {
