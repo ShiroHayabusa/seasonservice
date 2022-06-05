@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ServRequestRepo extends JpaRepository<ServRequest, Long> {
     List<ServRequest> findByUserIdAndServId(Long userId, Long servId);
-    List<ServRequest> findByUserId(Long userId);
+    List<ServRequest> findByUserIdOrderByDateDesc(Long userId);
 }

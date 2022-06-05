@@ -4,6 +4,13 @@ import com.bato.seasonservice.model.Serv;
 import com.bato.seasonservice.model.User;
 import com.bato.seasonservice.service.ServService;
 import com.bato.seasonservice.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.enums.ParameterStyle;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +33,29 @@ public class ServController {
         this.servService = servService;
     }
 
+    @Operation(
+            summary = "Найти услугу по заданному идентификатору",
+            description = "Запрашивает в базе данных информацию о услуге по заданному идентификатору",
+            parameters = {
+                    @Parameter(
+                            in = ParameterIn.PATH,
+                            name = "id",
+                            required = true,
+                            description = "Идентификатор запрашиваемой услуги",
+                            schema = @Schema(
+                                    minimum = "1",
+                                    allOf = {Long.class}
+                            ),
+                            style = ParameterStyle.SIMPLE
+                    )
+            }
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Запрос был выполнен успешно"),
+            @ApiResponse(responseCode = "400", description = "Bad Request (Неверный запрос)"),
+            @ApiResponse(responseCode = "404", description = "Not Found (Ресурс не найден)"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+    })
     @GetMapping(value = "/servs/{id}")
     public ResponseEntity<Serv> getServ(@PathVariable Long id) {
         if (id == null) {
@@ -47,6 +77,16 @@ public class ServController {
         return user;
     }
 
+    @Operation(
+            summary = "Создать новую услугу",
+            description = "Создает новую услугу"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Запрос был выполнен успешно"),
+            @ApiResponse(responseCode = "400", description = "Bad Request (Неверный запрос)"),
+            @ApiResponse(responseCode = "404", description = "Not Found (Ресурс не найден)"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error (Внутренняя ошибка сервера)")
+    })
     @PostMapping("/servs")
     public ResponseEntity<Serv> saveServ(@RequestBody @Valid Serv serv) {
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -58,6 +98,15 @@ public class ServController {
         return new ResponseEntity<>(serv, httpHeaders, HttpStatus.CREATED);
     }
 
+    @Operation(
+            summary = "Изменить ранее созданную услугу",
+            description = "Изменяет ранее созданную в соответсвии с заданными параметрами"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Запрос был выполнен успешно"),
+            @ApiResponse(responseCode = "400", description = "Bad Request (Неверный запрос)"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error (Внутренняя ошибка сервера)")
+    })
     @PutMapping("/servs")
     public ResponseEntity<Serv> updateServ(@RequestBody @Valid Serv serv) {
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -69,6 +118,30 @@ public class ServController {
         return new ResponseEntity<>(serv, httpHeaders, HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "Удалить услугу по заданному идентификатору",
+            description = "Удаляет услугу из базы данных по заданному идентификатору",
+            parameters = {
+                    @Parameter(
+                            in = ParameterIn.PATH,
+                            name = "id",
+                            required = true,
+                            description = "Идентификатор удаляемой услуги",
+                            schema = @Schema(
+                                    minimum = "1",
+                                    allOf = {Long.class}
+                            ),
+                            style = ParameterStyle.SIMPLE
+                    )
+            }
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Запрос был выполнен успешно"),
+            @ApiResponse(responseCode = "204", description = "No Content"),
+            @ApiResponse(responseCode = "400", description = "Bad Request (Неверный запрос)"),
+            @ApiResponse(responseCode = "404", description = "Not Found (Ресурс не найден)"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error (Внутренняя ошибка сервера)")
+    })
     @DeleteMapping("/servs/{id}")
     public ResponseEntity<Serv> deleteServ(@PathVariable Long id) {
         Serv serv = servService.getById(id);
@@ -79,6 +152,16 @@ public class ServController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @Operation(
+            summary = "Запрос списка услуг",
+            description = "Список услуг"
+    )
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Запрос был выполнен успешно"),
+            @ApiResponse(responseCode = "404", description = "Not Found (Ресурс не найден)"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера"),
+    })
     @GetMapping("/servs")
     public ResponseEntity<List<Serv>> getAllServs(){
         List<Serv> servs = servService.getAll();

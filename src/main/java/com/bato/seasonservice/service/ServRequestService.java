@@ -34,7 +34,7 @@ public class ServRequestService {
         return servRequestRepo.findByUserIdAndServId(userId, servId);
     }
 
-    public List<ServRequest> findByUserId(Long userId) {
-        return servRequestRepo.findByUserId(userId);
+    public List<ServRequest> findByUserIdOrderByDateDesc(Long userId) {
+        return servRequestRepo.findByUserIdOrderByDateDesc(userId);
     }
 }
