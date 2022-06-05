@@ -1,7 +1,7 @@
 package com.bato.seasonservice.config.Jwt;
 
-import com.bato.seasonservice.service.CustomUserDetailsService;
 import com.bato.seasonservice.config.CustomUserDetails;
+import com.bato.seasonservice.config.CustomUserDetailsService;
 import lombok.extern.java.Log;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +24,6 @@ public class JwtFilter extends GenericFilterBean {
     public static final String AUTHORIZATION = "Authorization";
 
     private final CustomUserDetailsService customUserDetailsService;
-
     private final JwtProvider jwtProvider;
 
     public JwtFilter(CustomUserDetailsService customUserDetailsService, JwtProvider jwtProvider) {
@@ -35,12 +34,13 @@ public class JwtFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
-        logger.info("do filter...");
+        logger.info("doFilter...");
         String token = getTokenFromRequest((HttpServletRequest) servletRequest);
         if (token != null && jwtProvider.validateToken(token)) {
             String userLogin = jwtProvider.getLoginFromToken(token);
             CustomUserDetails customUserDetails = customUserDetailsService.loadUserByUsername(userLogin);
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                    customUserDetails, null, customUserDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
         filterChain.doFilter(servletRequest, servletResponse);

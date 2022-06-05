@@ -30,4 +30,8 @@ public class ServService {
     public List<Serv> getAll() {
         return servRepo.findAll();
     }
+
+
+
+
 }

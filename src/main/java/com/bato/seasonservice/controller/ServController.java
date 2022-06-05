@@ -1,7 +1,6 @@
 package com.bato.seasonservice.controller;
 
 import com.bato.seasonservice.model.Serv;
-import com.bato.seasonservice.model.User;
 import com.bato.seasonservice.service.ServService;
 import com.bato.seasonservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,11 +10,10 @@ import io.swagger.v3.oas.annotations.enums.ParameterStyle;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,7 +37,7 @@ public class ServController {
             parameters = {
                     @Parameter(
                             in = ParameterIn.PATH,
-                            name = "id",
+                            name = "servId",
                             required = true,
                             description = "Идентификатор запрашиваемой услуги",
                             schema = @Schema(
@@ -56,25 +54,18 @@ public class ServController {
             @ApiResponse(responseCode = "404", description = "Not Found (Ресурс не найден)"),
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
-    @GetMapping(value = "/servs/{id}")
-    public ResponseEntity<Serv> getServ(@PathVariable Long id) {
-        if (id == null) {
+    @GetMapping(value = "/servs/{servId}")
+    public ResponseEntity<Serv> getServ(@PathVariable("servId") Long servId) {
+        if (servId == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Serv serv = servService.getById(id);
+        Serv serv = servService.getById(servId);
 
         if (serv == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(serv, HttpStatus.OK);
-    }
-
-    public User getUser() {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = userDetails.getUsername();
-        User user = userService.findByLogin(username);
-        return user;
     }
 
     @Operation(
@@ -105,15 +96,19 @@ public class ServController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Запрос был выполнен успешно"),
             @ApiResponse(responseCode = "400", description = "Bad Request (Неверный запрос)"),
+            @ApiResponse(responseCode = "403", description = "Forbidden (У клиента нет прав доступа к содержимому)"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error (Внутренняя ошибка сервера)")
     })
-    @PutMapping("/servs")
-    public ResponseEntity<Serv> updateServ(@RequestBody @Valid Serv serv) {
+    @PutMapping("/servs/{servId}")
+    public ResponseEntity<Serv> updateServ(@PathVariable("servId") Long servId,
+                                           @RequestBody @Valid Serv serv) {
         HttpHeaders httpHeaders = new HttpHeaders();
 
         if (serv == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        Serv servFromDb = servService.getById(servId);
+        BeanUtils.copyProperties(serv, servFromDb, "id");
         servService.save(serv);
         return new ResponseEntity<>(serv, httpHeaders, HttpStatus.OK);
     }
@@ -124,7 +119,7 @@ public class ServController {
             parameters = {
                     @Parameter(
                             in = ParameterIn.PATH,
-                            name = "id",
+                            name = "servId",
                             required = true,
                             description = "Идентификатор удаляемой услуги",
                             schema = @Schema(
@@ -142,13 +137,13 @@ public class ServController {
             @ApiResponse(responseCode = "404", description = "Not Found (Ресурс не найден)"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error (Внутренняя ошибка сервера)")
     })
-    @DeleteMapping("/servs/{id}")
-    public ResponseEntity<Serv> deleteServ(@PathVariable Long id) {
-        Serv serv = servService.getById(id);
+    @DeleteMapping("/servs/{servId}")
+    public ResponseEntity<Serv> deleteServ(@PathVariable Long servId) {
+        Serv serv = servService.getById(servId);
         if (serv == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        servService.delete(id);
+        servService.delete(servId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

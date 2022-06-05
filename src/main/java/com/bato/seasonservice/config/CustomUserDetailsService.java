@@ -1,7 +1,8 @@
-package com.bato.seasonservice.service;
+package com.bato.seasonservice.config;
 
 import com.bato.seasonservice.config.CustomUserDetails;
 import com.bato.seasonservice.model.User;
+import com.bato.seasonservice.service.UserService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;

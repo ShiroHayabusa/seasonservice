@@ -26,14 +26,14 @@ public class UserService {
         return userRepo.save(user);
     }
 
-    public User findByLogin(String login){
+    public User findByLogin(String login) {
         return userRepo.findByLogin(login);
     }
 
-    public User findByLoginAndPassword(String login, String password){
+    public User findByLoginAndPassword(String login, String password) {
         User user = findByLogin(login);
         if (user != null) {
-            if (passwordEncoder.matches(password, user.getPassword())){
+            if (passwordEncoder.matches(password, user.getPassword())) {
                 return user;
             }
         }
