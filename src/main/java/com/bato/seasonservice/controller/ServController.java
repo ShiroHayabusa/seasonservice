@@ -54,7 +54,7 @@ public class ServController {
             @ApiResponse(responseCode = "404", description = "Not Found (Ресурс не найден)"),
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
-    @GetMapping(value = "/servs/{servId}")
+    @GetMapping(value = "/api/servs/{servId}")
     public ResponseEntity<Serv> getServ(@PathVariable("servId") Long servId) {
         if (servId == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -78,7 +78,7 @@ public class ServController {
             @ApiResponse(responseCode = "404", description = "Not Found (Ресурс не найден)"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error (Внутренняя ошибка сервера)")
     })
-    @PostMapping("/servs")
+    @PostMapping("/api/servs")
     public ResponseEntity<Serv> addServ(@RequestBody @Valid Serv serv) {
         HttpHeaders httpHeaders = new HttpHeaders();
 
@@ -99,7 +99,7 @@ public class ServController {
             @ApiResponse(responseCode = "403", description = "Forbidden (У клиента нет прав доступа к содержимому)"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error (Внутренняя ошибка сервера)")
     })
-    @PutMapping("/servs/{servId}")
+    @PutMapping("/api/servs/{servId}")
     public ResponseEntity<Serv> updateServ(@PathVariable("servId") Long servId,
                                            @RequestBody @Valid Serv serv) {
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -137,7 +137,7 @@ public class ServController {
             @ApiResponse(responseCode = "404", description = "Not Found (Ресурс не найден)"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error (Внутренняя ошибка сервера)")
     })
-    @DeleteMapping("/servs/{servId}")
+    @DeleteMapping("/api/servs/{servId}")
     public ResponseEntity<Serv> deleteServ(@PathVariable Long servId) {
         Serv serv = servService.getById(servId);
         if (serv == null) {
@@ -157,7 +157,7 @@ public class ServController {
             @ApiResponse(responseCode = "404", description = "Not Found (Ресурс не найден)"),
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера"),
     })
-    @GetMapping("/servs")
+    @GetMapping("/api/servs")
     public ResponseEntity<List<Serv>> getAllServs(){
         List<Serv> servs = servService.getAll();
         if (servs.isEmpty()) {

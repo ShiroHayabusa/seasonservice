@@ -70,8 +70,8 @@ public class ServRequestController {
             @ApiResponse(responseCode = "404", description = "Not Found (Ресурс не найден)"),
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
-    @GetMapping(value = "/requests/{requestId}")
-    public ResponseEntity<ServRequest> addServ(@PathVariable("requestId") Long requestId) {
+    @GetMapping(value = "/api/requests/{requestId}")
+    public ResponseEntity<ServRequest> getServRequest(@PathVariable("requestId") Long requestId) {
         if (requestId == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -108,8 +108,8 @@ public class ServRequestController {
             @ApiResponse(responseCode = "400", description = "Bad Request (Неверный запрос)"),
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
-    @PostMapping("/servs/{servId}/requests")
-    public ResponseEntity<?> saveServRequest(@PathVariable("servId") Long servId,
+    @PostMapping("/api/servs/{servId}/requests")
+    public ResponseEntity<?> addServRequest(@PathVariable("servId") Long servId,
                                              @RequestBody @Valid ServRequest servRequest) {
         HttpHeaders httpHeaders = new HttpHeaders();
         if (servRequest == null) {
@@ -138,7 +138,7 @@ public class ServRequestController {
                             "к сожалению лимит по данной услуге закончился",
                     user.getFirstName());
             sendMessage(user, message);
-            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://localhost:8080/servs")).build();
+            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://localhost:8080/api/servs")).build();
             //на фронте при редиректе вывести окно с сообщением о превышении лимита
         }
     }
@@ -166,7 +166,7 @@ public class ServRequestController {
             @ApiResponse(responseCode = "404", description = "Not Found (Ресурс не найден)"),
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
-    @DeleteMapping("/requests/{requestId}")
+    @DeleteMapping("/api/requests/{requestId}")
     public ResponseEntity<ServRequest> deleteServRequest(@PathVariable Long requestId) {
         servRequestService.deleteServRequest(requestId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -205,8 +205,8 @@ public class ServRequestController {
             @ApiResponse(responseCode = "404", description = "Not Found (Ресурс не найден)"),
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
-    @GetMapping("/users/{userId}/servs/{servId}/requests")
-    public ResponseEntity<List<ServRequest>> getServRequests(@PathVariable Long userId,
+    @GetMapping("/api/users/{userId}/servs/{servId}/requests")
+    public ResponseEntity<List<ServRequest>> getUserServRequests(@PathVariable Long userId,
                                                              @PathVariable Long servId) {
         List<ServRequest> servRequests = servRequestService.findByUserIdAndServId(userId, servId);
         if (servRequests.isEmpty()) {
@@ -237,7 +237,7 @@ public class ServRequestController {
             @ApiResponse(responseCode = "404", description = "Not Found (Ресурс не найден)"),
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
-    @GetMapping("/users/{userId}/requests")
+    @GetMapping("/api/users/{userId}/requests")
     public ResponseEntity<List<ServRequest>> getAllServRequests(@PathVariable Long userId) {
         List<ServRequest> servRequests = servRequestService.findByUserIdOrderByDateDesc(userId);
         if (servRequests.isEmpty()) {
